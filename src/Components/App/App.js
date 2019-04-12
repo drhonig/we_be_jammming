@@ -26,6 +26,7 @@ class App extends React.Component {
   }
 
   componentWillMount() {
+    console.log("process", process.env);
     Spotify.getAccessToken();
   }
 

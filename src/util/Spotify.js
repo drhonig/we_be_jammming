@@ -9,7 +9,6 @@ const Spotify = {
 
         const urlAccessToken = window.location.href.match(/access_token=([^&]*)/);
         const urlExpiresIn = window.location.href.match(/expires_in=([^&]*)/);
-        console.log("access", urlAccessToken);
 
         if (urlAccessToken && urlExpiresIn) {
             accessToken = urlAccessToken[1];
@@ -18,7 +17,7 @@ const Spotify = {
             window.history.pushState('Access Token', null, '/');
             return accessToken;
         } else {
-            const accessURL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&scope=playlist-modify-public&redirect_uri=${REDIRECT_URI}`;
+            const accessURL = `https://accounts.spotify.com/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=token&scope=playlist-modify-public&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}`;
             window.location = accessURL;
         }
     },
@@ -61,7 +60,7 @@ const Spotify = {
             return;
         }
         const accessToken = Spotify.getAccessToken();
-        const headers = {
+        let headers = {
             Authorization: `Bearer ${accessToken}`
         };
         let userID;
@@ -93,11 +92,15 @@ const Spotify = {
                 ).then(
                     jsonResponse => {
                         const playlistID = jsonResponse.id;
+                        console.log("playlist created response", jsonResponse);
+                        console.log("tracks", trackURIs);
+                        console.log("JSON tracks", JSON.stringify({ uris: trackURIs }));
 
-                        return fetch(`https://api.spotify.com/v1/users/${userID}/playlists/${playlistID}/tracks`, {
+
+                        return fetch(`https://api.spotify.com/v1/playlists/${playlistID}/tracks`, {
                             headers: headers,
                             method: 'POST', 
-                            body: JSON.stringify({ URIs: trackURIs })
+                            body: JSON.stringify({ uris: trackURIs })
                         });
                     }
                 );
