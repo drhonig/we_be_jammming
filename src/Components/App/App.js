@@ -76,20 +76,16 @@ class App extends React.Component {
     }
     return shuffled.slice(min);
   }
-
+  
   generateRandomPlaylist(term) {
-    console.log("term", term);
     Spotify.search(term).then(result => {
       this.setState({ searchResults: result });
       return result;
     }).then(res => {
-        console.log("last", res);
         let sortedArray = this.getRandomArrayElements(res, 10);
         this.setState({ playlistTracks: sortedArray });
-        console.log("SORT", sortedArray);
       }
     )
-    console.log("random", this.state.searchResults);
   }
 
 
