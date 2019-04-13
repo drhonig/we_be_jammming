@@ -30,6 +30,7 @@
     text-align: center;
     font-size: .833rem;
     transition: background-color .25s;
+    margin: 10px;
   }
   
   .SearchBar a:hover {
